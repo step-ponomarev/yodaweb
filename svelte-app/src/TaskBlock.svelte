@@ -97,7 +97,7 @@
 
 <div class="content" bind:this={content}>
     <Checkbox
-            completeEvent={completeTaskEvent}
+            checkEvent={completeTaskEvent}
             id={id}
     />
     <div class="taskBlock"

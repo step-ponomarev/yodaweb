@@ -2,7 +2,6 @@
     import ControlPane from './ControlPane.svelte';
     import AddTaskPane from './AddTaskPane.svelte';
     import ActualTaskPane from './ActualTaskPane.svelte';
-
 </script>
 
 <style>
@@ -10,7 +9,6 @@
         --main-bg-color: rgb(23, 32, 42);
         --separator-color: rgb(58, 68, 76);
         --form-bg-color: rgb(28, 39, 51);
-
     }
 
     main {

@@ -8,7 +8,7 @@
 
     let errors = [];
 
-    async function submitForm(frm) {
+    async function submitForm() {
         const form = document.querySelector('#registrationFrom');
         errors = Array(0);
 
@@ -19,6 +19,8 @@
         const VALID = (confirmPassword === password)
                 * isUsernameValid(username)
                 * isPasswordValid(password);
+
+        //TODO Сделать нормальную обработку через выброс ошибок
 
         if (VALID) {
             const user = {
@@ -74,7 +76,6 @@
                         <ul>{error}</ul>
                     {/each}
                 </li>
-
             </div>
         {/if}
 
@@ -92,11 +93,11 @@
                         name="username"
                         class="loginForm__input"
                         on:focus="{() => {
-            usernameLabel.style.color = 'rgb(73, 160, 235)';
-          }}"
+                            usernameLabel.style.color = 'rgb(73, 160, 235)';
+                        }}"
                         on:focusout="{() => {
-             usernameLabel.style.color = 'rgb(125, 138, 150)';
-          }}"
+                            usernameLabel.style.color = 'rgb(125, 138, 150)';
+                        }}"
                         required/>
             </label>
             <label class="inputAround">
@@ -108,11 +109,11 @@
                         name="password"
                         class="loginForm__input"
                         on:focus="{() => {
-            passwordLabel.style.color = 'rgb(73, 160, 235)';
-          }}"
+                            passwordLabel.style.color = 'rgb(73, 160, 235)';
+                        }}"
                         on:focusout="{() => {
-             passwordLabel.style.color = 'rgb(125, 138, 150)';
-          }}"
+                            passwordLabel.style.color = 'rgb(125, 138, 150)';
+                        }}"
                         required/>
             </label>
 
@@ -125,21 +126,21 @@
                         name="confirmPassword"
                         class="loginForm__input"
                         on:focus="{() => {
-            confirmPasswordLabel.style.color = 'rgb(73, 160, 235)';
-          }}"
+                            confirmPasswordLabel.style.color = 'rgb(73, 160, 235)';
+                        }}"
                         on:focusout="{() => {
-             confirmPasswordLabel.style.color = 'rgb(125, 138, 150)';
-          }}"
+                            confirmPasswordLabel.style.color = 'rgb(125, 138, 150)';
+                        }}"
                         required/>
             </label>
 
             <div class="loginForm__buttonArea">
                 <button class="loginForm__submitButton" type="button" on:click={submitForm}>register</button>
             </div>
-            <a href="/" on:click="{() => {
-
-    AUTH_MODE.set('LOGIN');
-}}" class="loginLink">sign in</a>
+            <a href="/"
+               on:click="{() => {
+                    AUTH_MODE.set('LOGIN');
+               }}" class="loginLink">sign in</a>
             <input id="_csrf" name="_csrf" type="hidden" value={$CSRF}/>
         </form>
     </div>

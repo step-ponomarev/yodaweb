@@ -5,6 +5,7 @@
     let surname = 'Платон';
     let login = 'molodoy2003';
 
+    //TODO СДЕЛАТЬ ЗАПОЛНЕНИЯ ИЗ ПОЛУЧЕННОГО ПОЛЬЗОВАТЕЛЯ
 
     async function logout() {
         const logoutFunc = await fetch('/logout', {
@@ -83,7 +84,6 @@
 
     .inbox {
         margin-bottom: 2em;
-
     }
 
     .boxButton {

@@ -1,7 +1,6 @@
 <script>
     export let id;
-    export let onCheck;
-    export let completeEvent;
+    export let checkEvent;
 </script>
 
 <style>
@@ -71,6 +70,6 @@
         type="checkbox"
         id="task-{id}"
         class="css-checkbox"
-        on:click={completeEvent}
+        on:click={checkEvent}
 />
 <label for="task-{id}" class="css-label"></label>

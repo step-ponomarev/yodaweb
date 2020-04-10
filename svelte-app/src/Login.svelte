@@ -204,11 +204,11 @@
                         name="username"
                         class="loginForm__input"
                         on:focus="{() => {
-            usernameLabel.style.color = 'rgb(73, 160, 235)';
-          }}"
+                            usernameLabel.style.color = 'rgb(73, 160, 235)';
+                        }}"
                         on:focusout="{() => {
-             usernameLabel.style.color = 'rgb(125, 138, 150)';
-          }}"
+                            usernameLabel.style.color = 'rgb(125, 138, 150)';
+                        }}"
                         required/>
             </label>
             <label class="inputAround">
@@ -220,11 +220,11 @@
                         name="password"
                         class="loginForm__input"
                         on:focus="{() => {
-            passwordLabel.style.color = 'rgb(73, 160, 235)';
-          }}"
+                            passwordLabel.style.color = 'rgb(73, 160, 235)';
+                        }}"
                         on:focusout="{() => {
-             passwordLabel.style.color = 'rgb(125, 138, 150)';
-          }}"
+                            passwordLabel.style.color = 'rgb(125, 138, 150)';
+                        }}"
                         required/>
             </label>
 
@@ -237,6 +237,7 @@
             </div>
             <a class="regLink" on:click="{() => {
                 AUTH_MODE.set('REGISTRATION');
+                window.location.pathname = '/';
             }}">sign up</a>
             <input id="_csrf" name="_csrf" type="hidden" value={$CSRF}/>
         </form>
