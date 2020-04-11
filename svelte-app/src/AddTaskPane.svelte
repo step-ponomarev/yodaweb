@@ -1,21 +1,45 @@
 <script>
+    import {CSRF, USER} from "./stores.js";
+
     let addTaskBlock;
     let arrowLabel;
     let addLabel;
     let inputField;
 
-    function enterEvent(field) {
+    async function enterEvent(field) {
         if (field.keyCode !== 13) {
             return;
         }
 
-        addTaskFromField();
+        await addTaskFromField();
     }
 
-    function addTaskFromField() {
+    async function addTaskFromField() {
         if (!inputField.value.trim()) {
             inputField.value = '';
             return;
+        }
+
+        const task = {
+            completed: false,
+            statement: inputField.value.trim(),
+            dateOfCreation: new Date(Date.now()),
+            dateOfFinish: null,
+        };
+
+        const response = await fetch('/task', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'X-XSRF-TOKEN': $CSRF
+            },
+            body: JSON.stringify(task)
+        });
+
+
+        //TODO удалить эту штуку
+        if (response.ok) {
+            console.log('ADDED TASK');
         }
 
         inputField.value = '';

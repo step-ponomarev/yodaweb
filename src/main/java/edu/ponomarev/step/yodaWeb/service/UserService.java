@@ -1,6 +1,5 @@
 package edu.ponomarev.step.yodaWeb.service;
 
-import edu.ponomarev.step.yodaWeb.config.security.UserRole;
 import edu.ponomarev.step.yodaWeb.domain.User;
 import edu.ponomarev.step.yodaWeb.dto.UserDto;
 import edu.ponomarev.step.yodaWeb.repository.UserRepository;
@@ -9,8 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -28,14 +25,20 @@ public class UserService implements UserDetailsService {
     return userRepository.findByUsername(username);
   }
 
-  public User addUser(UserDto userDto) {
-
+  public boolean addUser(UserDto userDto) {
     User user = new User(
         userDto.getUsername(),
         passwordEncoder.encode(userDto.getPassword()),
-        Set.of(UserRole.USER));
+        userDto.getUserRole());
 
+    var userWithThisName = loadUserByUsername(user.getUsername());
 
-    return userRepository.save(user);
+    if (userWithThisName != null) {
+      return false;
+    }
+
+    userRepository.save(user);
+
+    return true;
   }
 }

@@ -3,7 +3,7 @@ package edu.ponomarev.step.yodaWeb.controller;
 import edu.ponomarev.step.yodaWeb.domain.User;
 import edu.ponomarev.step.yodaWeb.dto.UserDto;
 import edu.ponomarev.step.yodaWeb.service.UserService;
-import org.springframework.security.access.prepost.PreAuthorize;import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,19 +15,22 @@ public class UserController {
     this.userService = userService;
   }
 
-  @PostMapping("register")
-  public void registerNew(@RequestBody UserDto userDto) {
-    System.out.println(userDto.getUsername());
-    userService.addUser(userDto);
+  @PostMapping("registration")
+  public boolean registerNew(@RequestBody UserDto userDto) {
+    return userService.addUser(userDto);
   }
 
   @GetMapping("user")
   public UserDto currentUser() {
-    var principal = (User) SecurityContextHolder
+    var user = (User) SecurityContextHolder
         .getContext()
         .getAuthentication()
         .getPrincipal();
 
-    return new UserDto(principal.getUsername(), principal.getPassword(), principal.getRoleSet());
+    return new UserDto(
+        user.getUsername(),
+        user.getPassword(),
+        user.getRoleSet()
+    );
   }
 }

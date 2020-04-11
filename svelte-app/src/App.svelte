@@ -7,9 +7,6 @@
     import Application from "./Application.svelte";
 
     import {getCookie} from "./Utils.svelte";
-
-
-
     onMount(async () => {
         const response = await fetch("/user", {redirect: "manual"});
 

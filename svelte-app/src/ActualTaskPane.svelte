@@ -1,28 +1,34 @@
 <script>
+    import {onMount} from "svelte";
     import TaskBlock from './TaskBlock.svelte';
 
-    const tasks = [
-        {
-            id: 1,
-            statement: 'Купить игрушку дьяволы'
-        },
-        {
-            id: 2,
-            statement: 'Научить енота пользоваться телевизором'
-        },
-        {
-            id: 3,
-            statement: 'Позвонить Максу Дорофееву'
-        },
-        {
-            id: 4,
-            statement: 'Научить маму пользоваться девтулзами'
+    let tasks = [];
+
+    onMount(async () => {
+       getTasks();
+    });
+
+    async function getTasks() {
+        const response = await fetch('/task', {
+            method: 'GET'
+        });
+
+        if (response.ok) {
+            const tasksFromServer = await response.json();
+
+            const newTasks = [];
+            await tasksFromServer.forEach(task => {
+
+                newTasks.push({
+                    id: task.id,
+                    statement: task.statement
+                });
+            });
+
+            tasks = newTasks;
         }
-    ];
-
-
+    }
 </script>
-
 
 <style>
     .taskPane {
