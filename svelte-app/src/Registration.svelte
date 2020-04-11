@@ -1,4 +1,5 @@
 <script>
+    import {ValidationError} from './Exceptions.svelte';
     import {AUTH_MODE, CSRF} from "./stores.js";
     import {isUsernameValid, isPasswordValid} from "./Validator.svelte";
 
@@ -6,78 +7,77 @@
     let passwordLabel;
     let confirmPasswordLabel;
 
-    let errors = [];
+    let registrationEvent = '';
 
     async function submitForm() {
         const form = document.querySelector('#registrationFrom');
-        errors = Array(0);
 
         const username = form.username.value;
         const password = form.password.value;
         const confirmPassword = form.confirmPassword.value;
 
-        const VALID = (confirmPassword === password)
-                * isUsernameValid(username)
-                * isPasswordValid(password);
-
-        //TODO Сделать нормальную обработку через выброс ошибок
-
-        if (VALID) {
-            const user = {
-                username: username,
-                password: password,
-                userRole: null
-            };
-
-            let response = await fetch('/registration', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
-                    'X-XSRF-TOKEN': $CSRF
-                },
-                body: JSON.stringify(user)
-            });
-
-            if (response.ok) {
-                const userWasAdded = await response.text();
-
-                if (userWasAdded === 'true') {
-                    AUTH_MODE.set('LOGIN');
-                    window.location.pathname = '/';
-                } else {
-                    errors.push('user with that username already exists');
-                }
-            } else {
-                errors.push('server not found');
-            }
-        } else {
-            if (!isUsernameValid(username)) {
-                errors.push('invalid username');
-            }
-
-            if (confirmPassword !== password) {
-                errors.push('password mismatch');
-            } else if (!isPasswordValid(password)) {
-                errors.push('invalid password');
-            }
-        }
-
         form.password.value = '';
         form.confirmPassword.value = '';
+
+        const USERNAME_IS_VALID = isUsernameValid(username);
+        const PASSWORD_IS_VALID = isPasswordValid(password);
+        const PASSWORDS_ARE_EQUAL = (confirmPassword === password);
+
+        if (!USERNAME_IS_VALID) {
+            throw new ValidationError('invalid username');
+        }
+
+        if (!PASSWORD_IS_VALID) {
+            throw new ValidationError('invalid password');
+        }
+
+        if (!PASSWORDS_ARE_EQUAL) {
+            throw new ValidationError('passwords mismatch');
+        }
+
+        const user = {
+            username: username,
+            password: password,
+            userRole: ['USER']
+        };
+
+        let response = await fetch('/registration', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'X-XSRF-TOKEN': $CSRF
+            },
+            body: JSON.stringify(user)
+        });
+
+        if (response.ok) {
+            const USER_WAS_ADDED = await response.text();
+
+            if (USER_WAS_ADDED !== 'true') {
+                throw new ValidationError('user with that username already exists');
+            }
+        } else {
+            throw new Error('server not found');
+        }
+
+        return 'Success!'
+    }
+
+    function handleRegisterClick() {
+        registrationEvent = submitForm();
     }
 </script>
 
 <div class="registration">
     <div class="container">
-        {#if errors.length !== 0}
-            <div class="errors">
-                <li>
-                    {#each errors as error}
-                        <ul>{error}</ul>
-                    {/each}
-                </li>
-            </div>
-        {/if}
+
+        {#await registrationEvent}
+            <div>...</div>
+        {:then state}
+            <div class="success">{state}</div>
+        {:catch error}
+            <div class="error">{error.message}</div>
+        {/await}
 
         <form class="registrationForm" id="registrationFrom">
             <div class="loginForm__title">
@@ -101,7 +101,11 @@
                         required/>
             </label>
             <label class="inputAround">
-                <div class="inputAround__text" name="label-div" bind:this={passwordLabel}>password</div>
+                <div class="inputAround__text"
+                     name="label-div"
+                     bind:this={passwordLabel}>
+                    password
+                </div>
 
                 <input
                         type="password"
@@ -118,7 +122,11 @@
             </label>
 
             <label class="inputAround">
-                <div class="inputAround__text" name="label-div" bind:this={confirmPasswordLabel}>confirm password</div>
+                <div class="inputAround__text"
+                     name="label-div"
+                     bind:this={confirmPasswordLabel}>
+                    confirm password
+                </div>
 
                 <input
                         type="password"
@@ -135,7 +143,11 @@
             </label>
 
             <div class="loginForm__buttonArea">
-                <button class="loginForm__submitButton" type="button" on:click={submitForm}>register</button>
+                <button class="loginForm__submitButton"
+                        type="button"
+                        on:click={handleRegisterClick}>
+                    register
+                </button>
             </div>
             <a href="/"
                on:click="{() => {
@@ -168,25 +180,6 @@
         padding-left: 4em;
         padding-right: 4em;
         border-radius: 10%;
-    }
-
-    .errors {
-        display: grid;
-        width: 100%;
-        height: auto;
-        justify-items: right;
-    }
-
-    .errors > li {
-        display: grid;
-        justify-items: left;
-        width: 100%;
-        color: #a2393f;
-    }
-
-    .errors > li > ul {
-        text-align: center;
-        margin: 0;
     }
 
     a {
@@ -303,4 +296,13 @@
             transform: scale(0.93, 0.93);
         }
     }
+
+    .error {
+        color: #700400;
+    }
+
+    .success {
+        color: #104e00;
+    }
+
 </style>

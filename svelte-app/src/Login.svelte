@@ -12,7 +12,6 @@
 
             USER.set(user);
             AUTH_MODE.set('AUTHORIZED');
-            window.location.pathname = '/';
         } else {
             alert("Invalid login or password.");
         }
@@ -23,15 +22,13 @@
         const xhr = new XMLHttpRequest();
         const submittedForm = new FormData(form.target);
 
-        xhr.open("POST", "/login");
+        xhr.open("POST", "/login", true);
 
         xhr.send(submittedForm);
 
         xhr.onload = () => {
             if (xhr.status == 200) {
-                getUser().catch(e => {
-                    alert(e);
-                });
+                window.location.pathname = '/';
             }
         };
 
@@ -237,7 +234,6 @@
             </div>
             <a class="regLink" on:click="{() => {
                 AUTH_MODE.set('REGISTRATION');
-                window.location.pathname = '/';
             }}">sign up</a>
             <input id="_csrf" name="_csrf" type="hidden" value={$CSRF}/>
         </form>

@@ -20,29 +20,27 @@
     });
 
     function saveCookies() {
-        const session = getCookie("JSESSIONID");
-        const csrf = getCookie("XSRF-TOKEN");
+        const session = getCookie('JSESSIONID');
+        const csrf = getCookie('XSRF-TOKEN');
 
         SESSIONID.set(session);
         CSRF.set(csrf);
     }
-/*
+
     AUTH_MODE.subscribe(async () => {
-        const response = await fetch("/user");
+        const response = await fetch('/user');
 
         if (response.ok) {
             let user = await response.json();
 
             USER.set(user);
-            AUTH_MODE.set('AUTHORIZED');
         } else {
-            AUTH_MODE.set('LOGIN');
             USER.set(null);
         }
     });
 
-    saveCookies();*/
-    AUTH_MODE.set('AUTHORIZED');
+    saveCookies();
+    //AUTH_MODE.set('AUTHORIZED');
 </script>
 
 {#if $AUTH_MODE === 'LOGIN'}

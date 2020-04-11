@@ -1,28 +1,26 @@
 <script>
     import {CSRF, AUTH_MODE, USER} from "./stores.js";
 
+    //TODO СДЕЛАТЬ ЗАПОЛНЕНИЯ ИЗ ПОЛУЧЕННОГО ПОЛЬЗОВАТЕЛЯ
+
     let name = 'Молодой';
     let surname = 'Платон';
     let login = 'molodoy2003';
 
-    //TODO СДЕЛАТЬ ЗАПОЛНЕНИЯ ИЗ ПОЛУЧЕННОГО ПОЛЬЗОВАТЕЛЯ
-
     async function logout() {
-        const logoutFunc = await fetch('/logout', {
+        const response = await fetch('/logout', {
             method: 'POST',
-            redirect: '/',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
                 'X-XSRF-TOKEN': $CSRF
             },
         });
 
-        if (logoutFunc.ok) {
-            await AUTH_MODE.set('LOGIN');
+        if (response.ok) {
+            window.location.pathname = '/';
         }
     };
 </script>
-
 
 <style>
     .content {
