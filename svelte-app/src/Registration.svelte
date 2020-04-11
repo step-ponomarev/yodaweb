@@ -19,21 +19,7 @@
         form.password.value = '';
         form.confirmPassword.value = '';
 
-        const USERNAME_IS_VALID = isUsernameValid(username);
-        const PASSWORD_IS_VALID = isPasswordValid(password);
-        const PASSWORDS_ARE_EQUAL = (confirmPassword === password);
-
-        if (!USERNAME_IS_VALID) {
-            throw new ValidationError('invalid username');
-        }
-
-        if (!PASSWORD_IS_VALID) {
-            throw new ValidationError('invalid password');
-        }
-
-        if (!PASSWORDS_ARE_EQUAL) {
-            throw new ValidationError('passwords mismatch');
-        }
+        await testUserData(username, password, confirmPassword);
 
         const user = {
             username: username,
@@ -50,36 +36,59 @@
             body: JSON.stringify(user)
         });
 
-        if (response.ok) {
-            const USER_WAS_ADDED = await response.text();
-
-            if (USER_WAS_ADDED !== 'true') {
-                throw new ValidationError('user with that username already exists');
-            }
-        } else {
+        if (!response.ok) {
             throw new Error('server not found');
+        }
+
+        const USER_WAS_ADDED = ((await response.text()) === 'true');
+
+        if (!USER_WAS_ADDED) {
+            throw new ValidationError('user with that username already exists');
         }
 
         return 'Success!'
     }
 
-    function handleRegisterClick() {
+    function testUserData(username, password, confirmPassword) {
+        const USERNAME_IS_VALID = isUsernameValid(username);
+        const PASSWORD_IS_VALID = isPasswordValid(password);
+        const PASSWORDS_ARE_EQUAL = (confirmPassword === password);
+
+        if (!USERNAME_IS_VALID) {
+            throw new ValidationError('invalid username');
+        }
+
+        if (!PASSWORD_IS_VALID) {
+            throw new ValidationError('invalid password');
+        }
+
+        if (!PASSWORDS_ARE_EQUAL) {
+            throw new ValidationError('passwords mismatch');
+        }
+    }
+
+    function handleRegisterClick(form) {
         registrationEvent = submitForm();
+
+        form.preventDefault();
     }
 </script>
 
 <div class="registration">
     <div class="container">
 
-        {#await registrationEvent}
-            <div>...</div>
-        {:then state}
-            <div class="success">{state}</div>
-        {:catch error}
-            <div class="error">{error.message}</div>
-        {/await}
 
-        <form class="registrationForm" id="registrationFrom">
+        <div class="errorBlock">
+            {#await registrationEvent}
+                <div>...</div>
+            {:then state}
+                <div class="success">{state}</div>
+            {:catch error}
+                <div class="error">{error.message}</div>
+            {/await}
+        </div>
+
+        <form class="registrationForm" id="registrationFrom" on:submit={handleRegisterClick}>
             <div class="loginForm__title">
                 <h2>please sign up</h2>
             </div>
@@ -144,8 +153,7 @@
 
             <div class="loginForm__buttonArea">
                 <button class="loginForm__submitButton"
-                        type="button"
-                        on:click={handleRegisterClick}>
+                        type="submit">
                     register
                 </button>
             </div>
@@ -295,6 +303,16 @@
         100% {
             transform: scale(0.93, 0.93);
         }
+    }
+
+    .errorBlock {
+        display: grid;
+        justify-items: center;
+        align-items: end;
+        width: 100%;
+        height: 2em;
+        padding: 0;
+        box-sizing: border-box;
     }
 
     .error {

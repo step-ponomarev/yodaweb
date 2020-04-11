@@ -3,9 +3,9 @@
 
     //TODO СДЕЛАТЬ ЗАПОЛНЕНИЯ ИЗ ПОЛУЧЕННОГО ПОЛЬЗОВАТЕЛЯ
 
-    let name = 'Молодой';
-    let surname = 'Платон';
-    let login = 'molodoy2003';
+    let name = '';
+    let surname = '';
+    let login = $USER.username;
 
     async function logout() {
         const response = await fetch('/logout', {
