@@ -1,11 +1,36 @@
 <script>
-    import {CSRF, AUTH_MODE, USER} from "./stores.js";
-
-    //TODO СДЕЛАТЬ ЗАПОЛНЕНИЯ ИЗ ПОЛУЧЕННОГО ПОЛЬЗОВАТЕЛЯ
+    import {CSRF, USER, CURRENT_BOX} from "./stores.js";
+    import {currentRoute} from "./router.js";
+    //TODO СДЕЛАТЬ ОБРАБОТКУ КНОПОК ВХОДЯЩИЕ, СЕГОДНЯ И ТД
 
     let name = '';
     let surname = '';
     let login = $USER.username;
+
+    CURRENT_BOX.subscribe(box => {
+        if (box !== '') {
+            const id = box.toLowerCase();
+            const buttons = Array.from(document.getElementsByClassName('boxButton'));
+            const button = document.getElementById(id);
+
+            buttons.forEach(bt => {
+                if (bt.id !== id) {
+                    bt.classList.remove('boxButton__active');
+                }
+            });
+
+            button.classList.add('boxButton__active');
+        }
+    });
+
+    async function chooseButton(elem) {
+        const button = elem.target;
+
+        CURRENT_BOX.set(button.id.toUpperCase());
+
+        currentRoute.set(`/${button.id}`);
+        window.history.pushState({path: `/${button.id}`}, '', window.location.origin + `/${button.id}`);
+    };
 
     async function logout() {
         const response = await fetch('/logout', {
@@ -97,6 +122,10 @@
         background-color: rgb(73, 160, 236);
     }
 
+    .boxButton__active {
+        background-color: rgb(73, 160, 236);
+    }
+
     .logoutButton {
         cursor: pointer;
         position: absolute;
@@ -123,10 +152,11 @@
     </div>
 
     <div class="boxesPart">
-        <div class="inbox boxButton">Выходящие</div>
-        <div class="boxButton">Сегодня</div>
-        <div class="boxButton">На неделе</div>
-        <div class="boxButton">Позже</div>
+        <div class="inbox boxButton boxButton__active" hidden></div>
+        <div class="inbox boxButton" id="inbox" on:click={chooseButton}>Выходящие</div>
+        <div class="boxButton" id="today" on:click={chooseButton}>Сегодня</div>
+        <div class="boxButton" id="week" on:click={chooseButton}>На неделе</div>
+        <div class="boxButton" id="late" on:click={chooseButton}>Позже</div>
     </div>
 
     <div class="logoutButton" on:click={logout}>logout</div>

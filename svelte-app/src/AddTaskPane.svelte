@@ -1,5 +1,5 @@
 <script>
-    import {CSRF, USER} from "./stores.js";
+    import {CSRF, USER, TASKS} from "./stores.js";
 
     let addTaskBlock;
     let arrowLabel;
@@ -25,6 +25,8 @@
             statement: inputField.value.trim(),
             dateOfCreation: new Date(Date.now()),
             dateOfFinish: null,
+            creator: null,
+            container: 'INBOX'
         };
 
         const response = await fetch('/task', {
@@ -37,9 +39,19 @@
         });
 
 
-        //TODO удалить эту штуку
         if (response.ok) {
-            console.log('ADDED TASK');
+            let tasks = $TASKS.slice();
+
+            const addedTask = await response.json();
+
+            await tasks.push({
+                id: addedTask.id,
+                statement: addedTask.statement,
+                container: addedTask.container,
+                completed: addedTask.completed
+            });
+
+            await TASKS.set(tasks);
         }
 
         inputField.value = '';

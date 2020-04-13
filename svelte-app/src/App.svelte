@@ -1,22 +1,51 @@
 <script>
     import {onMount} from "svelte";
-    import {SESSIONID, CSRF, USER, AUTH_MODE} from "./stores.js";
+    import {
+        SESSIONID,
+        CSRF,
+        USER,
+        AUTHORIZED,
+        AUTH_IS_CHECKED,
+        CURRENT_BOX
+    } from "./stores.js";
 
-    import Login from "./Login.svelte";
-    import Registration from "./Registration.svelte";
+    import {currentRoute, router} from './router.js';
+
     import Application from "./Application.svelte";
 
     import {getCookie} from "./Utils.svelte";
+
     onMount(async () => {
+        await getUsers();
+        await saveCookies();
+
+        if ($AUTHORIZED && (window.location.pathname === '/')) {
+            await currentRoute.set('/today');
+        } else {
+            await currentRoute.set(window.location.pathname);
+        }
+
+        if (!$AUTHORIZED && (window.location.pathname === '/')) {
+            await currentRoute.set('/login');
+        }
+
+        if (!history.state) {
+            await window.history.replaceState({path: $currentRoute}, '', $currentRoute);
+        }
+
+        await AUTH_IS_CHECKED.set(true);
+    });
+
+    async function getUsers() {
         const response = await fetch("/user", {redirect: "manual"});
 
         if (response.ok) {
             let user = await response.json();
 
             await USER.set(user);
-            await AUTH_MODE.set('AUTHORIZED');
+            await AUTHORIZED.set(true);
         }
-    });
+    }
 
     function saveCookies() {
         const session = getCookie('JSESSIONID');
@@ -26,26 +55,21 @@
         CSRF.set(csrf);
     }
 
-    AUTH_MODE.subscribe(async () => {
-        const response = await fetch('/user');
-
-        if (response.ok) {
-            let user = await response.json();
-
-            USER.set(user);
-        } else {
-            USER.set(null);
-        }
-    });
-
-    saveCookies();
-    //AUTH_MODE.set('AUTHORIZED');
+    function handlerBackNavigation(event) {
+        currentRoute.set(event.state.path)
+    }
 </script>
 
-{#if $AUTH_MODE === 'LOGIN'}
-    <Login/>
-{:else if $AUTH_MODE === 'REGISTRATION'}
-    <Registration/>
-{:else if $AUTH_MODE === 'AUTHORIZED'}
-    <Application/>
+<svelte:window
+        on:popstate={handlerBackNavigation}
+/>
+
+{#if AUTH_IS_CHECKED}
+    {#if $AUTHORIZED}
+        <Application/>
+    {:else}
+        <svelte:component this={router[$currentRoute]}/>
+    {/if}
 {/if}
+
+

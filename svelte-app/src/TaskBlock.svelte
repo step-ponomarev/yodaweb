@@ -2,8 +2,8 @@
     import Checkbox from './Checkbox.svelte';
     import {onMount} from "svelte";
 
-    export let id;
-    export let statement;
+    export let task;
+    export let updateTask;
 
     let content;
     let statementField;
@@ -11,16 +11,32 @@
     let statementBeforeChanging;
     let statementAfterChanging;
 
+    onMount(async () => {
+        setCompleteColor();
+    });
 
-    function completeTaskEvent(task) {
-        if (!task.target.checked) {
+    function setCompleteColor() {
+        if (!task.completed) {
             statementField.style.color = 'white';
             statementField.style.textDecoration = 'none';
-
         } else {
             statementField.style.color = 'rgb(58, 68, 76)';
             statementField.style.textDecoration = 'line-through';
         }
+    }
+
+    function completeTaskEvent(taskState) {
+        if (!taskState.target.checked) {
+            statementField.style.color = 'white';
+            statementField.style.textDecoration = 'none';
+        } else {
+            statementField.style.color = 'rgb(58, 68, 76)';
+            statementField.style.textDecoration = 'line-through';
+        }
+
+        task.completed = !task.completed;
+
+        updateTask(task);
     }
 
     function keyPressEvent(field) {
@@ -98,7 +114,8 @@
 <div class="content" bind:this={content}>
     <Checkbox
             checkEvent={completeTaskEvent}
-            id={id}
+            id={task.id}
+            completed={task.completed}
     />
     <div class="taskBlock"
          on:click={setInputFocused}
@@ -115,7 +132,7 @@
                 on:focusout={focusoutEvent}
                 on:paste={pasteEvent}
         >
-            {statement}
+            {task.statement}
         </div>
     </div>
 </div>

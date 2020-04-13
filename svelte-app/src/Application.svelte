@@ -1,7 +1,77 @@
 <script>
+    import {onMount} from 'svelte';
+    import {TASKS, CSRF, CURRENT_BOX} from './stores.js';
+    import {currentRoute, router} from './router.js';
+
     import ControlPane from './ControlPane.svelte';
     import AddTaskPane from './AddTaskPane.svelte';
-    import ActualTaskPane from './ActualTaskPane.svelte';
+    import TaskPane from './TaskPane.svelte';
+
+    onMount(async () => {
+        await getTasks();
+
+        await CURRENT_BOX.set($currentRoute.substring(1).toUpperCase());
+    });
+
+    async function getTasks() {
+        const response = await fetch('/task', {
+            method: 'GET'
+        });
+
+        if (response.ok) {
+            const tasksFromServer = await response.json();
+
+            const newTasks = [];
+            await tasksFromServer.forEach(task => {
+
+                newTasks.push({
+                    id: task.id,
+                    statement: task.statement,
+                    container: task.container,
+                    completed: task.completed
+                });
+            });
+
+            TASKS.set(newTasks);
+        }
+    }
+
+    async function updateTask(task) {
+        const updatedTask = {
+            id: task.id,
+            completed: task.completed,
+            statement: task.statement,
+            dateOfCreation: null,
+            dateOfFinish: null,
+            creator: null,
+            container: task.container
+        };
+
+        const response = await fetch('/task', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'X-XSRF-TOKEN': $CSRF
+            },
+
+            body: JSON.stringify(updatedTask)
+        });
+
+        if (response.ok) {
+            const tasksFromServer = await response.json();
+
+            const newTasks = $TASKS;
+            newTasks.forEach(task => {
+                if (tasksFromServer.id === task.id) {
+                    task.statement = tasksFromServer.statement;
+                    task.completed = tasksFromServer.completed;
+                    task.container = tasksFromServer.container;
+                }
+            });
+
+            TASKS.set(newTasks);
+        }
+    }
 </script>
 
 <style>
@@ -35,7 +105,21 @@
     </header>
     <main>
         <AddTaskPane/>
-        <ActualTaskPane/>
+        {#if $CURRENT_BOX === 'INBOX'}
+            <TaskPane box={$CURRENT_BOX}/>
+        {/if}
+
+        {#if $CURRENT_BOX === 'TODAY'}
+            <TaskPane box={$CURRENT_BOX}/>
+        {/if}
+
+        {#if $CURRENT_BOX === 'WEEK'}
+            <TaskPane box={$CURRENT_BOX}/>
+        {/if}
+
+        {#if $CURRENT_BOX === 'LATE'}
+            <TaskPane box={$CURRENT_BOX}/>
+        {/if}
     </main>
 </div>
 

@@ -1,6 +1,6 @@
 <script>
     import {ValidationError} from './Exceptions.svelte';
-    import {AUTH_MODE, CSRF} from "./stores.js";
+    import {CSRF} from "./stores.js";
     import {isUsernameValid, isPasswordValid} from "./Validator.svelte";
 
     let usernameLabel;
@@ -27,7 +27,7 @@
             userRole: ['USER']
         };
 
-        let response = await fetch('/registration', {
+        let response = await fetch('/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
@@ -157,10 +157,13 @@
                     register
                 </button>
             </div>
-            <a href="/"
-               on:click="{() => {
-                    AUTH_MODE.set('LOGIN');
-               }}" class="loginLink">sign in</a>
+            <a class="regLink"
+               href="/login"
+               on:click="{(event) => {
+                    currentRoute.set(event.target.pathname);
+                    window.history.pushState({path: '/login'}, '', window.location.origin + '/login');
+                    event.preventDefault();
+            }}">sign in</a>
             <input id="_csrf" name="_csrf" type="hidden" value={$CSRF}/>
         </form>
     </div>
@@ -168,13 +171,13 @@
 
 <style>
     .registration {
-        margin: 0;
         width: 100%;
         height: 100%;
         background-color: rgb(59, 66, 75);
         display: grid;
         justify-items: center;
         align-content: center;
+        box-sizing: border-box;
     }
 
     .container {

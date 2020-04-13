@@ -1,6 +1,8 @@
 <script>
+    import {onMount} from 'svelte';
     export let id;
     export let checkEvent;
+    export let completed;
 </script>
 
 <style>
@@ -71,5 +73,6 @@
         id="task-{id}"
         class="css-checkbox"
         on:click={checkEvent}
+        checked="{completed}"
 />
 <label for="task-{id}" class="css-label"></label>

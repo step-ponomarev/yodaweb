@@ -1,22 +1,9 @@
 <script>
-    import {USER, AUTH_MODE, CSRF} from "./stores.js";
+    import {USER, CSRF} from "./stores.js";
+    import {currentRoute} from "./router.js";
 
     let usernameLabel;
     let passwordLabel;
-
-    const getUser = async () => {
-        const response = await fetch("/user", {redirect: "manual"});
-
-        if (response.ok) {
-            let user = await response.json();
-
-            USER.set(user);
-            AUTH_MODE.set('AUTHORIZED');
-        } else {
-            alert("Invalid login or password.");
-        }
-
-    };
 
     async function submitForm(form) {
         const xhr = new XMLHttpRequest();
@@ -232,8 +219,12 @@
                     remember me
                 </label>
             </div>
-            <a class="regLink" on:click="{() => {
-                AUTH_MODE.set('REGISTRATION');
+            <a class="regLink"
+               href="/registration"
+               on:click="{(event) => {
+                    currentRoute.set(event.target.pathname);
+                    window.history.pushState({path: '/registration'}, '', window.location.origin + '/registration');
+                    event.preventDefault();
             }}">sign up</a>
             <input id="_csrf" name="_csrf" type="hidden" value={$CSRF}/>
         </form>
