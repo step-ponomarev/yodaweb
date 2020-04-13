@@ -17,7 +17,6 @@
 
     onMount(async () => {
         await getUsers();
-        await saveCookies();
 
         if ($AUTHORIZED && (window.location.pathname === '/')) {
             await currentRoute.set('/today');
@@ -34,6 +33,7 @@
         }
 
         await AUTH_IS_CHECKED.set(true);
+        await saveCookies();
     });
 
     async function getUsers() {

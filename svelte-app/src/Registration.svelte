@@ -42,6 +42,8 @@
 
         const USER_WAS_ADDED = ((await response.text()) === 'true');
 
+        alert(USER_WAS_ADDED);
+
         if (!USER_WAS_ADDED) {
             throw new ValidationError('user with that username already exists');
         }

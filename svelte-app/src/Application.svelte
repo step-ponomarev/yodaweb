@@ -106,19 +106,19 @@
     <main>
         <AddTaskPane/>
         {#if $CURRENT_BOX === 'INBOX'}
-            <TaskPane box={$CURRENT_BOX}/>
+            <TaskPane updateTask="{updateTask}" box={$CURRENT_BOX} movable={true}/>
         {/if}
 
         {#if $CURRENT_BOX === 'TODAY'}
-            <TaskPane box={$CURRENT_BOX}/>
+            <TaskPane updateTask="{updateTask}" box={$CURRENT_BOX}/>
         {/if}
 
         {#if $CURRENT_BOX === 'WEEK'}
-            <TaskPane box={$CURRENT_BOX}/>
+            <TaskPane updateTask="{updateTask}" box={$CURRENT_BOX}/>
         {/if}
 
         {#if $CURRENT_BOX === 'LATE'}
-            <TaskPane box={$CURRENT_BOX}/>
+            <TaskPane updateTask="{updateTask}" box={$CURRENT_BOX}/>
         {/if}
     </main>
 </div>

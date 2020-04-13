@@ -66,6 +66,10 @@
         if (statementAfterChanging.length === 0) {
             field.target.textContent = statementBeforeChanging;
         }
+
+        task.statement = field.target.textContent;
+
+        updateTask(task);
     }
 
     function setInputFocused() {

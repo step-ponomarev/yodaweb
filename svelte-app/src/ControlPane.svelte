@@ -142,7 +142,7 @@
 <div class="content">
     <div class="personalPart">
         <div class="imageBlock">
-            <img id="personalPicture" src="../image/m1000x1000.jpeg"/>
+            <img id="personalPicture" src="../image/m1000x1000.png"/>
         </div>
         <div class="infoBlock">
             <div class="login">@{login}</div>
@@ -153,7 +153,7 @@
 
     <div class="boxesPart">
         <div class="inbox boxButton boxButton__active" hidden></div>
-        <div class="inbox boxButton" id="inbox" on:click={chooseButton}>Выходящие</div>
+        <div class="inbox boxButton" id="inbox" on:click={chooseButton}>Входящие</div>
         <div class="boxButton" id="today" on:click={chooseButton}>Сегодня</div>
         <div class="boxButton" id="week" on:click={chooseButton}>На неделе</div>
         <div class="boxButton" id="late" on:click={chooseButton}>Позже</div>

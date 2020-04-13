@@ -1,5 +1,6 @@
 package edu.ponomarev.step.yodaWeb.domain;
 
+import edu.ponomarev.step.yodaWeb.dto.TaskContainer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,4 +26,6 @@ public class Task {
 
   @ManyToOne
   private User creator;
+  @Enumerated(EnumType.STRING)
+  private TaskContainer container;
 }

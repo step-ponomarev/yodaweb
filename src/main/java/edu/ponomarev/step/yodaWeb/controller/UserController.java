@@ -15,22 +15,13 @@ public class UserController {
     this.userService = userService;
   }
 
-  @PostMapping("registration")
+  @PostMapping("register")
   public boolean registerNew(@RequestBody UserDto userDto) {
     return userService.addUser(userDto);
   }
 
   @GetMapping("user")
   public UserDto currentUser() {
-    var user = (User) SecurityContextHolder
-        .getContext()
-        .getAuthentication()
-        .getPrincipal();
-
-    return new UserDto(
-        user.getUsername(),
-        user.getPassword(),
-        user.getRoleSet()
-    );
+    return userService.currentUser();
   }
 }

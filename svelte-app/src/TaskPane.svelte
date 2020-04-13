@@ -5,6 +5,7 @@
 
     export let box;
     export let updateTask;
+    export let movable = false;
 
     let tasks = Array();
 
@@ -29,7 +30,6 @@
         color: white;
         font-size: 20px;
     }
-
 </style>
 
 <div class="taskPane">

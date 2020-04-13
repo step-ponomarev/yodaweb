@@ -36,8 +36,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .authorizeRequests()
         .antMatchers("/", "/js/**", "/css/**", "/img/**").permitAll()
-        .antMatchers("/registration").not().authenticated()
+        .antMatchers("/registration", "/register").not().authenticated()
         .antMatchers(HttpMethod.GET, "/user").authenticated()
+        .antMatchers("/task").authenticated()
         .anyRequest()
         .authenticated()
         .and()
@@ -50,6 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .loginProcessingUrl("/login")
         .and()
         .rememberMe()
+            .key("SUPER_ULTRA_SECRET_KEY") // TODO: ИЗМЕНИТЬ КЛЮЧ
             .rememberMeParameter("remember-me")
             .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
         .and()

@@ -3,6 +3,7 @@ package edu.ponomarev.step.yodaWeb.service;
 import edu.ponomarev.step.yodaWeb.domain.User;
 import edu.ponomarev.step.yodaWeb.dto.UserDto;
 import edu.ponomarev.step.yodaWeb.repository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,5 +41,18 @@ public class UserService implements UserDetailsService {
     userRepository.save(user);
 
     return true;
+  }
+
+  public UserDto currentUser()  {
+    var user = (User) SecurityContextHolder
+        .getContext()
+        .getAuthentication()
+        .getPrincipal();
+
+    return new UserDto(
+        user.getUsername(),
+        user.getPassword(),
+        user.getRoleSet()
+    );
   }
 }
