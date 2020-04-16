@@ -27,6 +27,7 @@
                 newTasks.push({
                     id: task.id,
                     statement: task.statement,
+                    dateOfCreation: new Date(task.dateOfCreation),
                     container: task.container,
                     completed: task.completed
                 });
@@ -61,7 +62,7 @@
             const tasksFromServer = await response.json();
 
             const newTasks = $TASKS;
-            newTasks.forEach(task => {
+            await newTasks.forEach(task => {
                 if (tasksFromServer.id === task.id) {
                     task.statement = tasksFromServer.statement;
                     task.completed = tasksFromServer.completed;
@@ -69,7 +70,18 @@
                 }
             });
 
-            TASKS.set(newTasks);
+            await TASKS.set(newTasks);
+        }
+    }
+
+    // TODO: Внедрить сортировку!
+    function sortByCompleted(lv, rv) {
+        if (lv.completed && !rv.completed) {
+            return 1;
+        } else if (!lv.completed && rv.completed) {
+            return -1;
+        } else {
+            return 0;
         }
     }
 </script>
@@ -98,10 +110,9 @@
     }
 </style>
 
-
 <div class="app">
     <header>
-        <ControlPane/>
+        <ControlPane updateTask="{updateTask}"/>
     </header>
     <main>
         <AddTaskPane/>

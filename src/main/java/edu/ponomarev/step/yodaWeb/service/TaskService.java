@@ -52,6 +52,7 @@ public class TaskService {
     task.setCompleted(taskDto.isCompleted());
     task.setStatement(taskDto.getStatement());
     task.setDateOfFinish(taskDto.getDateOfFinish());
+    task.setContainer(taskDto.getContainer());
 
     return taskRepository.save(task);
   }

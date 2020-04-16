@@ -1,7 +1,7 @@
 <script>
-    import {onMount} from "svelte";
+    import {onMount, afterUpdate} from "svelte";
     import {TASKS} from './stores.js';
-    import TaskBlock from './TaskBlock.svelte';
+    import DraggableTaskBlock from "./DraggableTaskBlock.svelte";
 
     export let box;
     export let updateTask;
@@ -10,17 +10,20 @@
     let tasks = Array();
 
     onMount(async () => {
-        tasks = $TASKS.filter(task => (task.container === box));
+        let newTasks = await $TASKS.filter(task => (task.container === box));
+
+        tasks = newTasks;
     });
 
-    TASKS.subscribe(newTasks => {
-        tasks = newTasks.filter(task => (task.container === box));
-    });
+    TASKS.subscribe(async updatedTasks => {
+        let newTasks = await updatedTasks.filter(task => (task.container === box));
 
+        tasks = newTasks;
+    });
 </script>
 
 <style>
-    .taskPane {
+    .container {
         display: grid;
         gap: 0.2em;
         padding: 1em;
@@ -32,8 +35,8 @@
     }
 </style>
 
-<div class="taskPane">
+<div class="container">
     {#each tasks as task}
-        <TaskBlock updateTask={updateTask} task={task}/>
+        <DraggableTaskBlock updateTask={updateTask} task={task}/>
     {/each}
 </div>

@@ -11,5 +11,8 @@ export const TASKS = writable(Array(0));
 
 export const CURRENT_BOX = writable('');
 
+export const DRAGGED_TASK = writable(null);
+export const ENTERED_BOX = writable(null);
+
 
 

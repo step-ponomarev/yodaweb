@@ -1,11 +1,53 @@
 <script>
-    import {CSRF, USER, CURRENT_BOX} from "./stores.js";
+    import {CSRF, USER, CURRENT_BOX, ENTERED_BOX, DRAGGED_TASK, TASKS} from "./stores.js";
+    import {onMount} from "svelte";
     import {currentRoute} from "./router.js";
-    //TODO СДЕЛАТЬ ОБРАБОТКУ КНОПОК ВХОДЯЩИЕ, СЕГОДНЯ И ТД
+
+    export let updateTask;
 
     let name = '';
     let surname = '';
     let login = $USER.username;
+
+    onMount(async () => {
+        const buttons = Array.from(document.querySelectorAll(".boxButton"));
+
+        buttons.forEach(button => {
+            button.addEventListener('dragenter', dragEnter);
+            button.addEventListener('dragleave', dragLeave);
+            button.addEventListener('drop', dragDrop);
+            button.addEventListener('dragover', dragOver);
+        });
+    });
+
+    function dragEnter(elem) {
+        elem.target.classList.add('boxButton__active');
+        ENTERED_BOX.set(elem.target.id);
+    }
+
+    function dragLeave(elem) {
+        if ($CURRENT_BOX !==  elem.target.id) {
+            elem.target.classList.remove('boxButton__active');
+        }
+
+        ENTERED_BOX.set(null);
+    }
+
+    async function dragDrop(elem) {
+        $DRAGGED_TASK.container = $ENTERED_BOX.toUpperCase();
+
+        await updateTask($DRAGGED_TASK);
+
+        await ENTERED_BOX.set(null);
+
+        if ($CURRENT_BOX !==  elem.target.id) {
+            elem.target.classList.remove('boxButton__active');
+        }
+    }
+
+    function dragOver(elem) {
+        elem.preventDefault();
+    }
 
     CURRENT_BOX.subscribe(box => {
         if (box !== '') {
@@ -152,7 +194,7 @@
     </div>
 
     <div class="boxesPart">
-        <div class="inbox boxButton boxButton__active" hidden></div>
+        <div class="inbox boxButton__active" hidden></div>
         <div class="inbox boxButton" id="inbox" on:click={chooseButton}>Входящие</div>
         <div class="boxButton" id="today" on:click={chooseButton}>Сегодня</div>
         <div class="boxButton" id="week" on:click={chooseButton}>На неделе</div>

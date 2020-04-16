@@ -12,7 +12,7 @@
     let statementAfterChanging;
 
     onMount(async () => {
-        setCompleteColor();
+        await setCompleteColor();
     });
 
     function setCompleteColor() {
@@ -63,11 +63,15 @@
     function focusoutEvent(field) {
         statementAfterChanging = field.target.textContent.trim();
 
+        if (statementAfterChanging === statementBeforeChanging) {
+            return;
+        }
+
         if (statementAfterChanging.length === 0) {
             field.target.textContent = statementBeforeChanging;
         }
 
-        task.statement = field.target.textContent;
+        task.statement = statementAfterChanging;
 
         updateTask(task);
     }
@@ -82,6 +86,7 @@
         display: flex;
         width: 100%;
         padding: 0.5em;
+        padding-right: 1em;
         padding-bottom: 0.3em;
     }
 

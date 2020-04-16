@@ -3,7 +3,6 @@ package edu.ponomarev.step.yodaWeb.dto;
 import edu.ponomarev.step.yodaWeb.domain.User;
 import lombok.Builder;
 import lombok.Data;
-
 import java.time.LocalDateTime;
 
 @Data
