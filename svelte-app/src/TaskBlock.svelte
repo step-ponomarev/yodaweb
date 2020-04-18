@@ -1,4 +1,5 @@
 <script>
+    import {CSRF, TASKS} from './stores.js';
     import Checkbox from './Checkbox.svelte';
     import {onMount} from "svelte";
 
@@ -7,6 +8,7 @@
 
     let content;
     let statementField;
+    let deleteButton;
 
     let statementBeforeChanging;
     let statementAfterChanging;
@@ -76,8 +78,34 @@
         updateTask(task);
     }
 
+    function mouseCover() {
+        deleteButton.style.display = 'block';
+    }
+
+    function onMouseOut() {
+        deleteButton.style.display = 'none';
+    }
+
     function setInputFocused() {
         statementField.focus();
+    }
+
+    async function deleteTask() {
+        const response = await fetch('task', {
+           method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'X-XSRF-TOKEN': $CSRF
+            },
+
+            body: JSON.stringify(task)
+        });
+
+        if (response.ok) {
+            const tasks = $TASKS.slice().filter(deletedTask => task.id !== deletedTask.id);
+
+            TASKS.set(tasks);
+        }
     }
 </script>
 
@@ -118,9 +146,31 @@
         word-wrap: break-word;
         word-break: break-all;
     }
+
+    .deleteButton {
+        display: none;
+        margin-left: auto;
+        width: 1em;
+        height: 1em;
+        align-self: self-start;
+    }
+
+    .deleteButton::before {
+        content: "\2716";
+        color: rgb(58, 68, 76);
+    }
+
+    .deleteButton:hover::before  {
+        transition: 200ms;
+        transform: translateY(3);
+        color: #700400;
+    }
 </style>
 
-<div class="content" bind:this={content}>
+<div class="content"
+     on:mouseover={mouseCover}
+     on:mouseout={onMouseOut}
+     bind:this={content}>
     <Checkbox
             checkEvent={completeTaskEvent}
             id={task.id}
@@ -142,6 +192,10 @@
                 on:paste={pasteEvent}
         >
             {task.statement}
+        </div>
+        <div    bind:this={deleteButton}
+                on:click={deleteTask}
+                class="deleteButton">
         </div>
     </div>
 </div>

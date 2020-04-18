@@ -108,6 +108,7 @@
         background-color: var(--main-bg-color);
         box-sizing: border-box;
     }
+
 </style>
 
 <div class="app">
@@ -116,6 +117,7 @@
     </header>
     <main>
         <AddTaskPane/>
+
         {#if $CURRENT_BOX === 'INBOX'}
             <TaskPane updateTask="{updateTask}" box={$CURRENT_BOX} movable={true}/>
         {/if}

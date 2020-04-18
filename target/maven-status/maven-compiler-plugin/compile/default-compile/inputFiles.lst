@@ -1,0 +1,17 @@
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/domain/User.java
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/service/TaskService.java
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/controller/RouteController.java
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/config/security/WebSecurityConfig.java
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/config/security/UserRole.java
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/repository/UserRepository.java
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/dto/UserDto.java
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/service/StorageService.java
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/controller/TaskController.java
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/service/UserService.java
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/repository/TaskRepository.java
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/YodaWebApplication.java
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/dto/TaskContainer.java
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/controller/UserController.java
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/dto/TaskDto.java
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/config/security/PasswordConfig.java
+/Users/stepan/Documents/Программирование/yodaweb/src/main/java/edu/ponomarev/step/yodaWeb/domain/Task.java

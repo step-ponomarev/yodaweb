@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="yoda@localhost" uuid="1c7d419a-e751-44aa-b5e7-05f88fb3c9b9">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost/yoda?useUnicode=true&amp;serverTimezone=UTC</jdbc-url>
+    </data-source>
+  </component>
+</project>
