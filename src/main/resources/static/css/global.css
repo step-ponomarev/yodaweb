@@ -5,6 +5,7 @@ html, body {
 
 body {
     margin: 0;
+    background-color: rgb(25, 32, 41);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }

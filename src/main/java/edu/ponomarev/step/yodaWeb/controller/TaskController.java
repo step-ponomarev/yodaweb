@@ -3,7 +3,6 @@ package edu.ponomarev.step.yodaWeb.controller;
 import edu.ponomarev.step.yodaWeb.domain.Task;
 import edu.ponomarev.step.yodaWeb.dto.TaskDto;
 import edu.ponomarev.step.yodaWeb.service.TaskService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,5 +29,10 @@ public class TaskController {
   @PutMapping
   public Task updateTask(@RequestBody TaskDto taskDto) {
     return taskService.updateTask(taskDto);
+  }
+
+  @DeleteMapping
+  public void deleteTask(@RequestBody TaskDto taskDto) {
+    taskService.deleteTask(taskDto);
   }
 }

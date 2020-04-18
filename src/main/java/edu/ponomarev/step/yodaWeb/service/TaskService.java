@@ -56,4 +56,10 @@ public class TaskService {
 
     return taskRepository.save(task);
   }
+
+  public void deleteTask(TaskDto taskDto) {
+    var task = taskRepository.getOne(taskDto.getId());
+
+    taskRepository.delete(task);
+  }
 }

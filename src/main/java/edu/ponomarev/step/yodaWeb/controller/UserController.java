@@ -1,9 +1,7 @@
 package edu.ponomarev.step.yodaWeb.controller;
 
-import edu.ponomarev.step.yodaWeb.domain.User;
 import edu.ponomarev.step.yodaWeb.dto.UserDto;
 import edu.ponomarev.step.yodaWeb.service.UserService;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
