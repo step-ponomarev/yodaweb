@@ -1,6 +1,7 @@
 <script>
     import {ValidationError} from './Exceptions.svelte';
     import {CSRF} from "./stores.js";
+    import {currentRoute} from './router.js';
     import {isUsernameValid, isPasswordValid} from "./Validator.svelte";
 
     let usernameLabel;
@@ -42,13 +43,14 @@
 
         const USER_WAS_ADDED = ((await response.text()) === 'true');
 
-        alert(USER_WAS_ADDED);
-
         if (!USER_WAS_ADDED) {
             throw new ValidationError('user with that username already exists');
         }
 
-        return 'Success!'
+        if (response.ok) {
+            currentRoute.set('/login');
+            window.history.pushState({path: '/login'}, '', window.location.origin + '/login');
+        }
     }
 
     function testUserData(username, password, confirmPassword) {
@@ -57,15 +59,17 @@
         const PASSWORDS_ARE_EQUAL = (confirmPassword === password);
 
         if (!USERNAME_IS_VALID) {
-            throw new ValidationError('invalid username');
+            throw new ValidationError('Имя пользователя должно начинаться с латинской буквы и содержать не менее ' +
+                    'шести символов.' +
+                    ' ');
         }
 
         if (!PASSWORD_IS_VALID) {
-            throw new ValidationError('invalid password');
+            throw new ValidationError('Пароль должен содержать не менее 8 символов.');
         }
 
         if (!PASSWORDS_ARE_EQUAL) {
-            throw new ValidationError('passwords mismatch');
+            throw new ValidationError('Пароли не совпадают.');
         }
     }
 
@@ -83,8 +87,6 @@
         <div class="errorBlock">
             {#await registrationEvent}
                 <div>...</div>
-            {:then state}
-                <div class="success">{state}</div>
             {:catch error}
                 <div class="error">{error.message}</div>
             {/await}
@@ -232,22 +234,6 @@
         margin-bottom: -0.5em;
     }
 
-    .loginLink {
-        align-self: self-start;
-        justify-self: right;
-        font-size: 16px;
-        border-radius: 10%;
-        width: max-content;
-        height: min-content;
-        cursor: pointer;
-        color: rgb(67, 148, 218);
-    }
-
-    .loginLink:hover {
-        text-decoration: underline;
-        text-decoration-color: rgb(18, 139, 245);
-    }
-
     .inputAround {
         display: grid;
         padding: 0;
@@ -321,11 +307,6 @@
     }
 
     .error {
-        color: #700400;
+        color: #d44b47;
     }
-
-    .success {
-        color: #104e00;
-    }
-
 </style>

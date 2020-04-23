@@ -116,9 +116,8 @@
         <ControlPane updateTask="{updateTask}"/>
     </header>
     <main>
-        <AddTaskPane/>
-
         {#if $CURRENT_BOX === 'INBOX'}
+            <AddTaskPane/>
             <TaskPane updateTask="{updateTask}" box={$CURRENT_BOX} movable={true}/>
         {/if}
 

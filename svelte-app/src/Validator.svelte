@@ -7,6 +7,8 @@
     }
 
     export function isPasswordValid(password) {
-        return PASSWORD_REG_EXP.test(password);
+
+
+        return (password.length > 8);
     }
 </script>

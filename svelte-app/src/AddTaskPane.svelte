@@ -121,7 +121,7 @@
     <input
             type="text"
             spellcheck="false"
-            placeholder="Добавить новую задача"
+            placeholder="Добавить новую задачу"
             bind:this={inputField}
             on:keypress={enterEvent}
             on:focus={focusInputFieldEvent}
