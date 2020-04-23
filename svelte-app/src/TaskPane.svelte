@@ -27,7 +27,6 @@
         display: grid;
         gap: 0.2em;
         padding: 1em;
-        margin-top: 2em;
         width: 100%;
         box-sizing: border-box;
         color: white;

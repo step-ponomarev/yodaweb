@@ -83,12 +83,12 @@
         display: flex;
         margin-left: auto;
         margin-right: auto;
+        margin-bottom: 2em;
         color: white;
         padding: 1em 1em 0.3em;
         width: 100%;
         background-color: var(--form-bg-color);
         border-bottom: 3px solid rgb(125, 138, 150);
-
         box-sizing: border-box;
     }
 
