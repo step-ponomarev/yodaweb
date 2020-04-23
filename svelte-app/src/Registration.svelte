@@ -196,7 +196,7 @@
         padding-bottom: 4em;
         padding-left: 4em;
         padding-right: 4em;
-        border-radius: 10px;
+        border-radius: 50px;
     }
 
     a {
