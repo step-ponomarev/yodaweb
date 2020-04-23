@@ -185,16 +185,18 @@
     }
 
     .container {
+        display: grid;
+        justify-items: center;
         margin-bottom: 10em;
         color: white;
         background-color: rgb(23, 32, 42);
-        width: max-content;
+        width: 450px;
         height: auto;
         padding-top: 1em;
         padding-bottom: 4em;
         padding-left: 4em;
         padding-right: 4em;
-        border-radius: 10%;
+        border-radius: 10px;
     }
 
     a {
@@ -297,10 +299,9 @@
     }
 
     .errorBlock {
-        display: grid;
-        justify-items: center;
-        align-items: end;
-        width: 100%;
+        justify-self: center;
+        margin-right: auto;
+        margin-left: auto;
         height: 2em;
         padding: 0;
         box-sizing: border-box;
